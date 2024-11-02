@@ -1,5 +1,5 @@
 from typing import Annotated
-
+import time
 from fastapi import FastAPI, Header, APIRouter, BackgroundTasks
 from pydantic import BaseModel
 from starlette import status
@@ -22,13 +22,13 @@ class Output_Wrapper(BaseModel):
 class Async_Ack(BaseModel):
     description: str
 
-@callback_router.post("{$callbackurl}")
+@callback_router.post("{$callbackurl}", status_code=status.HTTP_202_ACCEPTED)
 def make_callback() -> Output_Wrapper:
     pass
 
 @app.post("/v1/generate", callbacks=callback_router.routes, status_code=status.HTTP_202_ACCEPTED)
 async def generate(req: Async_Request,background_tasks: BackgroundTasks,
-                   callbackurl: Annotated[str | None, Header()] = None) -> Async_Ack:
+                   callbackurl: Annotated[str , Header()] = None) -> Async_Ack:
 
     ack = Async_Ack(description = "Async Ack")
     print("*** Callback URL " + callbackurl)
@@ -44,6 +44,8 @@ async def foo(payload: Output_Wrapper):
 def send_response(callbackurl: str):
     print("*** Sending response to " + callbackurl)
     resp = Async_Response(name = "Fred", age = 18)
+
+    time.sleep(5)
     wrapper = Output_Wrapper(output=resp)
 
     httpx.post(callbackurl, data=wrapper.model_dump_json())

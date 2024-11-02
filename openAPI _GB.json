@@ -1,0 +1,246 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "WxO Async",
+    "description": "Async APi for WxO to use",
+    "version": "0.1.0"
+  },
+  "servers": [
+    {
+      "url": "https://wxo-async.1d13bpwyy9q7.us-east.codeengine.appdomain.cloud"
+    }
+  ],
+  "paths": {
+    "/v1/generate": {
+      "post": {
+        "summary": "Generate",
+        "operationId": "generate_v1_generate_post",
+        "parameters": [
+          {
+            "name": "callbackurl",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Callbackurl"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Async_Request"
+              }
+            }
+          }
+        },
+        "callbacks": {
+          "make_callback": {
+            "{$callbackurl}": {
+              "post": {
+                "summary": "Make Callback",
+                "operationId": "make_callback__callbackurl__post",
+                "responses": {
+                  "202": {
+                    "description": "Successful Response",
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "$ref": "#/components/schemas/Output_Wrapper"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Async_Ack"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBasic": [
+
+            ]
+          }
+        ]
+      }
+    },
+    "/foo": {
+      "post": {
+        "summary": "Foo",
+        "operationId": "foo_foo_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Output_Wrapper"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Async_Ack": {
+        "properties": {
+          "description": {
+            "type": "string",
+            "title": "Description"
+          }
+        },
+        "type": "object",
+        "required": [
+          "description"
+        ],
+        "title": "Async_Ack"
+      },
+      "Async_Request": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "age": {
+            "type": "integer",
+            "title": "Age"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "age"
+        ],
+        "title": "Async_Request"
+      },
+      "Async_Response": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "age": {
+            "type": "integer",
+            "title": "Age"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "age"
+        ],
+        "title": "Async_Response"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "Output_Wrapper": {
+        "properties": {
+          "output": {
+            "$ref": "#/components/schemas/Async_Response"
+          }
+        },
+        "type": "object",
+        "required": [
+          "output"
+        ],
+        "title": "Output_Wrapper"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    },
+    "securitySchemes": {
+      "HTTPBasic": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    }
+  }
+}
