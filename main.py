@@ -35,7 +35,7 @@ async def generate(req: Async_Request,background_tasks: BackgroundTasks,
     ack = Async_Ack(description = "Async Ack")
     print("*** Callback URL " + callbackurl)
 
-    background_tasks.add_task(send_response, callbackurl=callbackurl)
+    background_tasks.add_task(send_response, callbackurl=callbackurl, req=req)
 
     return ack
 
@@ -43,11 +43,12 @@ async def generate(req: Async_Request,background_tasks: BackgroundTasks,
 async def foo(payload: Output_Wrapper):
     print("Foo Received " + payload.model_dump_json())
 
-def send_response(callbackurl: str):
+def send_response(callbackurl: str, req: Async_Request):
     print("*** Sending response to " + callbackurl)
-    resp = Async_Response(name = "Fred", age = 18)
 
-    # time.sleep(5)
+    resp = Async_Response(name = req.name, age = req.age + 1)
+
+    time.sleep(5)
     wrapper = Output_Wrapper(output=resp)
     print("*** Sending response ")
     print(wrapper.model_dump_json())
