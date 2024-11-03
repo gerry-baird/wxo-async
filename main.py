@@ -1,3 +1,4 @@
+import json
 from typing import Annotated
 import time
 from fastapi import FastAPI, Header, APIRouter, BackgroundTasks
@@ -51,7 +52,14 @@ def send_response(callbackurl: str):
     print("*** Sending response ")
     print(wrapper.model_dump_json())
 
+    dummy = {
+        "output": {
+            "name": "Zizzi",
+            "age": 21
+        }
+    }
+
     headers = {'Content-Type': 'application/json'}
 
-    response = httpx.post(callbackurl, json=wrapper.model_dump_json(), headers=headers)
+    response = httpx.post(callbackurl, json=json.dumps(dummy), headers=headers)
     print(response.json())
