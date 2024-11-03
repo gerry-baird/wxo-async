@@ -56,5 +56,5 @@ def send_response(callbackurl: str):
 
     headers = {'Content-Type': 'application/json'}
 
-    response = httpx.post(callbackurl, json=resp.model_dump_json(), headers=headers)
+    response = httpx.post(callbackurl, json=wrapper.model_dump_json(), headers=headers)
     print(response.json())
