@@ -74,7 +74,7 @@
                   "content": {
                       "application/json": {
                         "schema": {
-                          "$ref": "#/components/schemas/Output_Wrapper"
+                          "$ref": "#/components/schemas/Async_Response"
                         }
                       }
                     }
