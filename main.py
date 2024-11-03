@@ -23,7 +23,7 @@ class Output_Wrapper(BaseModel):
 class Async_Ack(BaseModel):
     description: str
 
-@app.get("")
+@app.get("/")
 def alive ():
     return {"message": "Alive"}
 
