@@ -33,7 +33,10 @@ async def generate(req: Async_Request,background_tasks: BackgroundTasks,
     print("*** /v1/generate called with body:")
     print(req.model_dump_json())
     ack = Async_Ack(description = "Async Ack")
-    print("*** Callback URL " + callbackurl)
+    print("*** Received callback URL " + callbackurl)
+
+    # do complex processing that requires async response
+    req.age = req.age + 1
 
     background_tasks.add_task(send_response, callbackurl=callbackurl, req=req)
 
@@ -45,11 +48,12 @@ async def foo(payload: Output_Wrapper):
 
 def send_response(callbackurl: str, req: Async_Request):
     print("*** Sending response to " + callbackurl)
+    print("*** Taking a qick nap")
+    time.sleep(10)
 
-    resp = Async_Response(name = req.name, age = req.age + 1)
+    payload = Async_Response(name = req.name, age = req.age)
 
-    time.sleep(5)
-    wrapper = Output_Wrapper(output=resp)
+    wrapper = Output_Wrapper(output=payload)
     print("*** Sending response ")
     print(wrapper.model_dump_json())
 
