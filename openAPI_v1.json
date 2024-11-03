@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://wxo-async.1d13bpwyy9q7.us-east.codeengine.appdomain.cloud"
+      "url": "https://wxo-async.onrender.com/"
     }
   ],
   "security": [

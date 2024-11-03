@@ -29,7 +29,8 @@ def make_callback() -> Output_Wrapper:
 @app.post("/v1/generate", callbacks=callback_router.routes, status_code=status.HTTP_202_ACCEPTED)
 async def generate(req: Async_Request,background_tasks: BackgroundTasks,
                    callbackurl: Annotated[str , Header()] = None) -> Async_Ack:
-
+    print("*** /v1/generate called with body:")
+    print(req.model_dump_json())
     ack = Async_Ack(description = "Async Ack")
     print("*** Callback URL " + callbackurl)
 
@@ -45,7 +46,8 @@ def send_response(callbackurl: str):
     print("*** Sending response to " + callbackurl)
     resp = Async_Response(name = "Fred", age = 18)
 
-    time.sleep(5)
+    # time.sleep(5)
     wrapper = Output_Wrapper(output=resp)
-
+    print("*** Sending response ")
+    print(wrapper.model_dump_json())
     httpx.post(callbackurl, data=wrapper.model_dump_json())
