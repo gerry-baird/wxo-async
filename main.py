@@ -23,6 +23,10 @@ class Output_Wrapper(BaseModel):
 class Async_Ack(BaseModel):
     description: str
 
+@app.get("")
+def alive ():
+    return {"message": "Alive"}
+
 @callback_router.post("{$callbackurl}", status_code=status.HTTP_202_ACCEPTED)
 def make_callback() -> Output_Wrapper:
     pass
@@ -48,13 +52,13 @@ async def foo(payload: Output_Wrapper):
 
 def send_response(callbackurl: str, req: Async_Request):
     print("*** Sending response to " + callbackurl)
-    print("*** Taking a qick nap")
+    print("*** Taking a quick nap")
     time.sleep(10)
 
     payload = Async_Response(name = req.name, age = req.age)
 
     wrapper = Output_Wrapper(output=payload)
-    print("*** Sending response ")
+    print("*** Awake - now sending response ")
     print(wrapper.model_dump_json())
 
 
