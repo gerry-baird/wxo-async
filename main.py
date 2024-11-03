@@ -53,10 +53,8 @@ def send_response(callbackurl: str):
     print(wrapper.model_dump_json())
 
     dummy = {
-        "output": {
             "name": "Zizzi",
             "age": 21
-        }
     }
 
     headers = {'Content-Type': 'application/json'}
