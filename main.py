@@ -59,11 +59,12 @@ def send_response(callbackurl: str, req: Async_Request):
 
     wrapper = Output_Wrapper(output=payload)
     print("*** Awake - now sending response ")
-    print(wrapper.model_dump_json())
+    jsonStr = json.dumps(wrapper.dict())
+    print(jsonStr)
 
 
 
     headers = {'Content-Type': 'application/json'}
 
-    response = httpx.post(callbackurl, json=wrapper.model_dump_json(), headers=headers)
+    response = httpx.post(callbackurl, data=jsonStr, headers=headers)
     print(response.json())
